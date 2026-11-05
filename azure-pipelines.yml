@@ -1,0 +1,35 @@
+trigger:
+- main
+
+pool:
+  vmImage: windows-latest
+
+steps:
+
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.12'
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install pyinstaller
+    pip install pymupdf
+    pip install pillow
+    pip install tkinterdnd2
+  displayName: Install Packages
+
+- script: |
+    pyinstaller --windowed --collect-all tkinterdnd2 --noconfirm --name PDFtoJPG pdf_to_jpg_converter.py
+  displayName: Build
+
+- powershell: |
+    Compress-Archive `
+      -Path "dist\PDFtoJPG" `
+      -DestinationPath "PDFtoJPG.zip"
+  displayName: Zip
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'PDFtoJPG.zip'
+    ArtifactName: 'PDFtoJPG'
+    publishLocation: 'Container'
