@@ -1,0 +1,11 @@
+;!@Install@!UTF-8!
+
+Title="PDFtoJPG"
+
+InstallPath="%S\PDFtoJPG"
+
+GUIFlags="2"
+
+RunProgram="PDFtoJPG.exe"
+
+;!@InstallEnd@!
